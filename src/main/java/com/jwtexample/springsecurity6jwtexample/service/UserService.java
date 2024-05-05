@@ -26,12 +26,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<UserDTO> users = userRepo.findAll();
@@ -53,36 +47,4 @@ public class UserService implements UserDetailsService {
         return userDetails;
     }
 
-    public JwtAuthResponse logonUser(LoginBean requestBean) throws Exception{
-
-        /**
-         * Using authentication manager user is authenticated
-         * If user is not authenticated it throws exception
-         * if no exception is thrown that means user is authenticated
-         * Now we get UserDetails from UserService and generate a token
-         * We send the token to user
-         */
-        authenticate(requestBean.getUsername(), requestBean.getPassword());
-
-        final UserDetails userDetails = loadUserByUsername(requestBean.getUsername());
-
-        final String token = jwtUtil.generateToken(userDetails);
-
-        JwtAuthResponse tokenResponse = new JwtAuthResponse();
-
-        tokenResponse.setToken(token);
-        tokenResponse.setSuccessful(true);
-
-        return tokenResponse;
-    }
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-    }
 }

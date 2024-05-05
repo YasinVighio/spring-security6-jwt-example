@@ -3,6 +3,7 @@ package com.jwtexample.springsecurity6jwtexample.controller;
 
 import com.jwtexample.springsecurity6jwtexample.beans.JwtAuthResponse;
 import com.jwtexample.springsecurity6jwtexample.beans.LoginBean;
+import com.jwtexample.springsecurity6jwtexample.service.LoginService;
 import com.jwtexample.springsecurity6jwtexample.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
-    UserService userService;
+    LoginService loginService;
 
     @RequestMapping("/login")
     public JwtAuthResponse loginUser(LoginBean loginRequest) throws Exception{
-        return userService.logonUser(loginRequest);
+        return loginService.logonUser(loginRequest);
     }
 
     @RequestMapping("/protectedEp")
