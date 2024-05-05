@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
@@ -12,11 +14,12 @@ import io.jsonwebtoken.*;
 @Component
 public class JwtUtil {
 
-    //requirement :
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    @Value("${app.tokenValidityTime}")
+    public static int JWT_TOKEN_VALIDITY;
 
-    //    public static final long JWT_TOKEN_VALIDITY =  60;
-    private String secret = "11111111111111222222222222222222222iiiiiiiiiiiiiiiiiiiiiiiijjjjjjjjjjjjjjjjjjjjjjjjjjjjjkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
+
+    @Value("${app.secretkey}")
+    private String secret;
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
